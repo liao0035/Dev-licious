@@ -86,28 +86,30 @@
 
         <div class="card-group__page">
           <h1 class="card-group__title">Recipes</h1>
-          <ul class="card-group__filter">
-            <!-- meal type -->
-            <li class="card-filter__unit">
-              <label for="type">Meal Type:</label>
-              <select id="type" name="type">
-                <option value="All">All</option>
-                <option value="Breakfast">Breakfast</option>
-                <option value="Lunch">Lunch</option>
-                <option value="Dinner">Dinner</option>
-                <option value="Dessert">Dessert</option>
-                <option value="Snack">Snack</option>
-              </select>
-            </li>
-            <!-- sort by -->
-            <li class="card-filter__unit">
-              <label for="sort">Sort By:</label>
-              <select id="sort" name="sort">
-                <option value="topRate">Top Rated</option>
-                <option value="name">Name</option>
-              </select>
-            </li>
-          </ul>
+          <form action="./recipes.html" method="get">
+            <ul class="card-group__filter">
+              <!-- meal type -->
+              <li class="card-filter__unit">
+                <label for="mealType">Meal Type:</label>
+                <select id="type" name="mealType" onchange="this.form.submit()">
+                  <option value="All">All</option>
+                  <option value="Breakfast">Breakfast</option>
+                  <option value="Lunch">Lunch</option>
+                  <option value="Dinner">Dinner</option>
+                  <option value="Dessert">Dessert</option>
+                  <option value="Snack">Snack</option>
+                </select>
+              </li>
+              <!-- sort by -->
+              <li class="card-filter__unit">
+                <label for="sortBy">Sort By:</label>
+                <select id="sort" name="sortBy" onchange="this.form.submit()">
+                  <option value="topRate">Top Rated</option>
+                  <option value="name">Name</option>
+                </select>
+              </li>
+            </ul>
+          </form>
         </div>
 
         <ul class="card-group__list" role="list">

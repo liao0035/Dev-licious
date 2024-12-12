@@ -68,14 +68,19 @@ function renderRecipes(recipes) {
 // Search URL setting
 async function searchRecipes(query) {
   if (!query) return;
-  const url = buildURL(BASE_URL + "/search", {
+  let url = new URL(location.href);
+  url.pathname = "/search";
+  url.searchParams.set("q", query);
+  url.searchParams.set("sortBy", "rating");
+  url.searchParams.set("order", "desc");
+  /*   const url = buildURL(BASE_URL + "/search", {
     q: query,
     sortBy: "rating",
     order: "desc",
     limit: "3",
-  });
+  }); */
 
-  const data = await getData(url);
+  const data = await getData(url.toString());
   console.log(data);
   renderRecipes(data.recipes);
 }
