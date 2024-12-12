@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <meta http-equiv="content-security-policy" content="default-src 'self';
+  style-src 'self' 'unsafe-inline' fonts.googleapis.com;
+  script-src 'self' 'unsafe-inline' https://unpkg.com;
+  font-src 'self' https://fonts.gstatic.com https://unpkg.com;
+  img-src 'self' data: dummyjson.com cdn.dummyjson.com;
+  connect-src 'self' dummyjson.com  https://unpkg.com;
+  ">
+  <!-- google font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&display=swap" rel="stylesheet" />
+  <!-- google icon -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+
+  <!-- Ionicons  -->
+  <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+
+  <!-- style sheet -->
+  <link rel="stylesheet" href="./css/main.css" />
+  <script src="./js/main.js" type="module"></script>
+
+
+  <title>Dummy Receipt</title>
+</head>
+
+<body id="home">
+  <ul class="skip-links" id="page">
+    <li>
+      <a class="skip-links__link" href="#nav">Skip to main navigation</a>
+    </li>
+    <li>
+      <a class="skip-links__link" href="#main">Skip to main content</a>
+    </li>
+  </ul>
+  <!-- navbar -->
+  <header class="navbar">
+    <div class="container">
+      <h1 class="navbar__headline">
+        <a class="navbar__logo" href="./index.html" aria-label="Click to return to home page">
+          Dev-licious
+        </a>
+      </h1>
+
+      <nav id="nav" class="navbar__nav">
+        <ul class="navbar__list">
+          <li><a class="navbar__link" href="./recipes.html" aria-label="click here to Receipts page">Recipes</a></li>
+          <li><a class="navbar__link" href="./blog.html" aria-label="click here to Blog page">Blog</a></li>
+          <!-- input search -->
+          <li>
+            <form action="./recipes.html" method="get" class="navbar__form" id="search-form">
+              <div class="input-container">
+                <label for="search" class="srt">Search</label>
+                <input type="search" id="search" name="keyword" required />
+                <button type="submit" class="submitbtn">
+                  <i class="material-symbols-outlined">search</i>
+                </button>
+
+              </div>
+            </form>
+          </li>
+
+        </ul>
+      </nav>
+
+      <button class="toggle" data-target="nav" aria-label="toggle">
+        <span class="toggle__line toggle__line--top"></span>
+        <span class="toggle__line toggle__line--middle"></span>
+        <span class="toggle__line toggle__line--bottom"></span>
+      </button>
+
+    </div>
+  </header>
+
+  <main id="main">
+    <!-- banner -->
+    <!-- this should be a header -->
+    <header>
+      <section class="banner banner--hero" tabindex="0">
+        <div class="container">
+          <div class="banner__content">
+            <div class="banner__title">Welcome to Dev-licious</div>
+            <p class="banner__text">Here you'll find dev-licious recipes for all occasions, all you
+              have to do is fetch them!
+              <a href="#" aria-label="click here to today's pick">Today's Pick</a>
+            </p>
+          </div>
+        </div>
+      </section>
+    </header>
+
+    <!-- card group -->
+    <section class="card-group" id="resources" tabindex="0">
+      <div class="container">
+
+        <div class="card-group__page">
+          <h2 class="card-group__title">Top Rated Recipes</h2>
+          <a href="./recipes.html" class="btn" aria-label="click here to Receipts page">view all</a>
+        </div>
+
+        <ul class="card-group__list" role="list">
+          <!-- JS template -->
+        </ul>
+      </div>
+    </section>
+
+    <!-- sign up form -->
+    <section class="sign-up" id="sign-up" tabindex="0">
+      <div class="container">
+        <div class="sign-up__wrap">
+          <form class="sign-up__form" action="https://formspree.io/f/mbljqebz" method="POST">
+            <div class="form-unit">
+              <h2 class="sign-up__title">
+                Sign up for the Dev-licious newsletter!
+              </h2>
+              <p>
+                Interested in receiving great cooking tips, deals on amazing
+                ingredients, and the latest and greatest recipes right in your
+                inbox? If so, sign up today!
+              </p>
+            </div>
+
+            <div class="form-unit">
+              <label for="email" class="srt">email</label>
+              <input type="email" name="email" id="email" placeholder="Email" required />
+            </div>
+            <div class="form-unit">
+              <label for="name" class="srt">name</label>
+              <input type="text" name="name" id="name" placeholder="Name" required />
+            </div>
+            <div class="form-unit">
+              <button type="submit" class="btn">Submit</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+
+      <a class="footer__logo" href="index.html" target="_blank" aria-label="click here to home page">
+        <h2>Dev-Licious</h2>
+      </a>
+
+      <div class="footer__nav">
+        <ul class="footer__list">
+          <li><a href="./recipes.html" class="footer__link" aria-label="click here to receipts page">Receipts</a></li>
+          <li><a href="./blog.html" class="footer__link" aria-label="click here to blog page">Blog</a></li>
+        </ul>
+      </div>
+
+      <div class="footer__link-group">
+        <h4>Follow <a href="#" class="footer__logo" aria-label="click here to home page">Dev-Licious</a> </h4>
+        <ul>
+          <li>
+            <a href="#" class="footer__link" aria-label="click here to instagram page"><ion-icon name="logo-instagram" size="large"></ion-icon></a>
+          </li>
+          <li>
+            <a href="#" class="footer__link" aria-label="click here to twitter page"><ion-icon name="logo-xing" size="large"></ion-icon></a>
+          </li>
+          <li>
+            <a href="#" class="footer__link" aria-label="click here to youtube page"><ion-icon name="logo-youtube" size="large"></ion-icon></a>
+          </li>
+        </ul>
+      </div>
+
+    </div>
+
+    <div class="footer__copyright">
+      <small> &copy 2024 Dev-licious Inc.
+        All Rights Reserved.
+        <a href="#" aria-label="click here to terms of service page page">Terms of Service.</a> </small>
+    </div>
+  </footer>
+
+
+
+
+  <!-- to top -->
+  <a href="#page" class="to-top" aria-label="click here go to top">To Top</a>
+  <div class="click-to-close" data-toggle="nav"></div>
+
+
+  <!-- JS template for card -->
+  <template id="card-group__template">
+    <li class="col">
+      <a class="card" href="#" aria-label="click here to single recipe page">
+        <img class="card__img" alt="A random cat!" />
+        <div class="card__content">
+          <h3 class="card__title"></h3>
+          <p class="card__cuisine">
+            <i class="material-symbols-outlined"></i>
+          </p>
+          <p class="card__meal-type">
+            <i class="material-symbols-outlined"></i>
+          </p>
+          <p class="card__tag">
+            <i class="material-symbols-outlined"></i>
+          </p>
+          <a href="#" class="card__btn" aria-label="click here to single recipe page"><span class="srt">Learn More</span></a>
+        </div>
+      </a>
+    </li>
+  </template>
+
+
+</body>
+
+</html>

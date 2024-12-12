@@ -1,0 +1,59 @@
+import { getData } from "./fetch.js";
+
+// default setting
+async function fetchRecipes() {
+  const params = new URLSearchParams({
+    limit: 6,
+    sortBy: "rating",
+    order: "desc",
+  });
+  const url = `https://dummyjson.com/recipes?${params.toString()}`;
+  console.log("this is default url", url);
+  return await getData(url);
+}
+
+// retrieve the data from url
+async function loadRecipes() {
+  try {
+    const data = await fetchRecipes();
+    const recipes = data.recipes;
+    console.log("this is from loadRecipes", recipes);
+
+    renderRecipes(recipes);
+  } catch (err) {
+    console.error("error loading recipes:", err);
+  }
+}
+
+// create HTML
+function renderRecipes(recipes) {
+  const df = document.createDocumentFragment();
+  const template = document.querySelector("#card-group__template");
+  const ul = document.querySelector(".card-group__list");
+
+  // Loop through recipes and display them
+  recipes.forEach((recipe) => {
+    const clone = template.content.cloneNode(true);
+    clone.querySelector(".card__img").src = recipe.image;
+    clone.querySelector(".card__title").textContent = recipe.name;
+
+    const cuisine = clone.querySelector(".card__cuisine");
+    cuisine.querySelector("i").textContent = "flag_2";
+    cuisine.append((document.textContent = recipe.cuisine));
+
+    const difficulty = clone.querySelector(".card__meal-type");
+    difficulty.querySelector("i").textContent = "restaurant";
+    difficulty.append((document.textContent = recipe.mealType.join(" . ")));
+
+    const tag = clone.querySelector(".card__tag");
+    tag.querySelector("i").textContent = "tag";
+    tag.append((document.textContent = recipe.tags.join(" . ")));
+
+    clone.querySelector(".card__btn").href = `recipe.html?id=${recipe.id}`;
+
+    df.append(clone);
+  });
+  ul.append(df);
+}
+
+loadRecipes();
