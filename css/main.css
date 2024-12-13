@@ -945,7 +945,8 @@ h5 {
       .card__title,
       .card__meal-type,
       .card__cuisine,
-      .card__tag {
+      .card__tag,
+      .card__rating {
         translate: 0 -1.5rem;
         opacity: 0;
         transition: translate var(--transition), opacity var(--transition);
@@ -961,7 +962,8 @@ h5 {
       .card__title,
       .card__meal-type,
       .card__cuisine,
-      .card__tag {
+      .card__tag,
+      .card__rating {
         color: #fff;
         translate: 0;
         opacity: 1;
@@ -1014,7 +1016,7 @@ h5 {
 
   }
 
-  .card__meal-type+.card__cuisine+card__tag {
+  .card__meal-type+.card__cuisine+.card__tag+.card__rating {
     margin: 0;
     flex-grow: 1;
     flex-shrink: 0;
@@ -1024,7 +1026,8 @@ h5 {
 
 .card__meal-type,
 .card__cuisine,
-.card__tag {
+.card__tag,
+.card__rating {
   display: flex;
   gap: 1rem;
 }

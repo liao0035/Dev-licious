@@ -125,9 +125,9 @@ function renderRecipes(recipes) {
     clone.querySelector(".card__img").src = recipe.image;
     clone.querySelector(".card__title").textContent = recipe.name;
 
-    const cuisine = clone.querySelector(".card__cuisine");
-    cuisine.querySelector("i").textContent = "flag_2";
-    cuisine.append((document.textContent = recipe.cuisine));
+    const rating = clone.querySelector(".card__rating");
+    rating.querySelector("i").textContent = "star";
+    rating.append(document.createTextNode(recipe.rating));
 
     const difficulty = clone.querySelector(".card__meal-type");
     difficulty.querySelector("i").textContent = "restaurant";

@@ -42,13 +42,13 @@ function renderRecipes(recipes) {
     clone.querySelector(".card__img").src = recipe.image;
     clone.querySelector(".card__title").textContent = recipe.name;
 
-    const cuisine = clone.querySelector(".card__cuisine");
-    cuisine.querySelector("i").textContent = "flag_2";
-    cuisine.append(document.createTextNode(recipe.cuisine));
+    const rating = clone.querySelector(".card__rating");
+    rating.querySelector("i").textContent = "star";
+    rating.append(document.createTextNode(recipe.rating));
 
-    const difficulty = clone.querySelector(".card__meal-type");
-    difficulty.querySelector("i").textContent = "restaurant";
-    difficulty.append(document.createTextNode(recipe.mealType.join(" . ")));
+    const mealType = clone.querySelector(".card__meal-type");
+    mealType.querySelector("i").textContent = "restaurant";
+    mealType.append(document.createTextNode(recipe.mealType.join(" . ")));
 
     const tag = clone.querySelector(".card__tag");
     tag.querySelector("i").textContent = "tag";
@@ -126,6 +126,7 @@ async function saveToCache(query, result) {
     const cache = await caches.open(cacheName);
     const searchURL = buildURL(BASE_URL + "/search", {
       q: query,
+      limit: 3,
     });
     const response = new Response(JSON.stringify(result));
     // Save response in cache
@@ -158,12 +159,19 @@ async function sort(sortBy = "name", order = "asc") {
   const url = buildURL(BASE_URL, {
     sortBy: sortBy,
     order: order,
+    limit: "3",
   });
+  console.log("this is sort url", url);
   try {
     const data = await getData(url);
     if (data) {
       renderRecipes(data.recipes);
       console.log(data);
+
+      const params = new URLSearchParams(window.location.search);
+      params.set("sortBy", sortBy);
+      params.set("order", order);
+      window.history.pushState({}, "", `?${params.toString()}`);
     }
   } catch (err) {
     console.error("sort error:", err);
@@ -174,13 +182,16 @@ async function sort(sortBy = "name", order = "asc") {
 async function meal(mealType = "All") {
   const url =
     mealType === "All"
-      ? BASE_URL
-      : `https://dummyjson.com/recipes/meal-type/${mealType.toLowerCase()}`;
+      ? `${BASE_URL}?limit=3`
+      : `https://dummyjson.com/recipes/meal-type/${mealType.toLowerCase()}?limit=3`;
   try {
     const data = await getData(url);
     if (data) {
       renderRecipes(data.recipes);
-      // saveToCache("mealType", mealType, data);
+
+      const params = new URLSearchParams(window.location.search);
+      params.set("mealType", mealType);
+      window.history.pushState({}, "", `?${params.toString()}`);
     }
   } catch (err) {
     console.error("meal type:", err);
@@ -192,8 +203,6 @@ function filterListener() {
   const mealTypeSelect = document.getElementById("mealType");
   const sortBySelect = document.getElementById("sortBy");
 
-  let order = "asc";
-
   mealTypeSelect.addEventListener("change", (ev) => {
     const mealType = ev.target.value;
     meal(mealType);
@@ -201,9 +210,14 @@ function filterListener() {
 
   sortBySelect.addEventListener("change", (ev) => {
     const sortBy = ev.target.value;
-    sort(sortBy, order);
+    if (sortBy === "topRate") {
+      sort("rating", "desc");
+    } else if (sortBy === "name") {
+      sort("name", "asc");
+    }
   });
 }
+
 loadRecipes();
 filterListener();
 searchInput();
