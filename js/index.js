@@ -61,4 +61,3 @@ function renderRecipes(recipes) {
 }
 
 loadRecipes();
-searchInput();

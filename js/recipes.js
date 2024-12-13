@@ -3,9 +3,6 @@ import { getData } from "./fetch.js";
 const BASE_URL = "https://dummyjson.com/recipes";
 const cacheName = "dummy";
 
-let currentPage = 1;
-const recipesPerPage = 3;
-
 // Build URL
 function buildURL(base, params) {
   const url = new URL(base);
