@@ -114,7 +114,7 @@ function searchInput() {
         console.log("search for:", query);
 
         // reset the first page when starting a new search
-        currentPage = 1;
+        // currentPage = 1;
 
         searchRecipes(query);
       } else {
