@@ -2,7 +2,6 @@ import { getData } from "./fetch.js";
 
 const BASE_URL = "https://dummyjson.com/recipes";
 const cacheName = "dummy";
-const itemPerPage = 3;
 
 // Build URL
 function buildURL(base, params) {
@@ -64,32 +63,45 @@ function renderRecipes(recipes) {
   ul.append(df);
 }
 
-// Search URL setting (3 recipes)
-/* async function searchRecipes(query) {
+// Search recipes with cache
+async function searchRecipes(query) {
   if (!query) return;
-  const url = buildURL(BASE_URL + "/search", {
-    q: query,
-    sortBy: "rating",
-    order: "desc",
-    // limit: itemPerPage,
-    // skip: 0,
-  });
-  console.log(url);
-  // show the new URL on the URL bar ******
-  const params = new URLSearchParams(window.location.search);
-  params.set("q", query);
-  window.history.pushState({}, "", `?${params.toString()}`);
 
-  try {
-    const data = await getData(url);
-    console.log(data);
-    if (data) {
-      renderRecipes(data.recipes);
+  // Try to get data from cache first
+  const cachedData = await retrieveCache(query);
+
+  if (cachedData) {
+    // If data is found in the cache, render it
+    console.log("Rendering recipes from cache...");
+    renderRecipes(cachedData.recipes);
+  } else {
+    // If no data in cache, fetch from the network
+    const url = buildURL(BASE_URL + "/search", {
+      q: query,
+      sortBy: "rating",
+      order: "desc",
+      limit: "3",
+    });
+
+    // Show the new URL in the URL bar
+    const params = new URLSearchParams(window.location.search);
+    params.set("q", query);
+    window.history.pushState({}, "", `?${params.toString()}`);
+
+    try {
+      const data = await getData(url);
+      console.log("Fetched data from API:", data);
+
+      if (data) {
+        renderRecipes(data.recipes);
+        // Save the fetched data to cache
+        saveToCache(query, data);
+      }
+    } catch (err) {
+      console.log("searchRecipes API call failed:", err);
     }
-  } catch (err) {
-    console.log("searchRecipes url setting fail:", err);
   }
-} */
+}
 
 // search event listener
 function searchInput() {
@@ -114,14 +126,10 @@ async function saveToCache(query, result) {
     const cache = await caches.open(cacheName);
     const searchURL = buildURL(BASE_URL + "/search", {
       q: query,
-      sortBy: "rating",
-      order: "desc",
-      limit: itemPerPage,
     });
-
     const response = new Response(JSON.stringify(result));
-    await cache.put(searchURL, response); // Save response in cache
-    console.log(`Saved search results to cache for query: ${query}`);
+    // Save response in cache
+    await cache.put(searchURL, response);
   } catch (err) {
     console.error("Error saving to cache:", err);
   }
@@ -133,18 +141,11 @@ async function retrieveCache(query) {
     const cache = await caches.open(cacheName);
     const searchURL = buildURL(BASE_URL + "/search", {
       q: query,
-      sortBy: "rating",
-      order: "desc",
-      limit: itemPerPage,
     });
-
     const cachedResponse = await cache.match(searchURL);
     if (cachedResponse) {
       const data = await cachedResponse.json();
-      console.log(`Loaded search results from cache for query: ${query}`);
       return data;
-    } else {
-      console.log(`No cached data found for query: ${query}`);
     }
   } catch (err) {
     console.error("Error retrieving from cache:", err);
@@ -152,46 +153,57 @@ async function retrieveCache(query) {
   return null;
 }
 
-// Search recipes with cache and fallback to network
-async function searchRecipes(query) {
-  if (!query) return;
-
-  // Try to get data from cache first
-  const cachedData = await retrieveCache(query);
-
-  if (cachedData) {
-    // If data is found in the cache, render it
-    console.log("Rendering recipes from cache...");
-    renderRecipes(cachedData.recipes);
-  } else {
-    // If no data in cache, fetch from the network
-    const url = buildURL(BASE_URL + "/search", {
-      q: query,
-      sortBy: "rating",
-      order: "desc",
-    });
-
-    console.log(`Fetching from network: ${url}`);
-
-    // Show the new URL in the URL bar
-    const params = new URLSearchParams(window.location.search);
-    params.set("q", query);
-    window.history.pushState({}, "", `?${params.toString()}`);
-
-    try {
-      const data = await getData(url);
-      console.log("Fetched data from API:", data);
-
-      if (data) {
-        renderRecipes(data.recipes);
-        // Save the fetched data to cache
-        saveToCache(query, data);
-      }
-    } catch (err) {
-      console.log("searchRecipes API call failed:", err);
+// sort by name or rating
+async function sort(sortBy = "name", order = "asc") {
+  const url = buildURL(BASE_URL, {
+    sortBy: sortBy,
+    order: order,
+  });
+  try {
+    const data = await getData(url);
+    if (data) {
+      renderRecipes(data.recipes);
+      console.log(data);
     }
+  } catch (err) {
+    console.error("sort error:", err);
   }
 }
 
+// meal-type
+async function meal(mealType = "All") {
+  const url =
+    mealType === "All"
+      ? BASE_URL
+      : `https://dummyjson.com/recipes/meal-type/${mealType.toLowerCase()}`;
+  try {
+    const data = await getData(url);
+    if (data) {
+      renderRecipes(data.recipes);
+      // saveToCache("mealType", mealType, data);
+    }
+  } catch (err) {
+    console.error("meal type:", err);
+  }
+}
+
+// event listener sorting & meal-type
+function filterListener() {
+  const mealTypeSelect = document.getElementById("mealType");
+  const sortBySelect = document.getElementById("sortBy");
+
+  let order = "asc";
+
+  mealTypeSelect.addEventListener("change", (ev) => {
+    const mealType = ev.target.value;
+    meal(mealType);
+  });
+
+  sortBySelect.addEventListener("change", (ev) => {
+    const sortBy = ev.target.value;
+    sort(sortBy, order);
+  });
+}
 loadRecipes();
+filterListener();
 searchInput();
