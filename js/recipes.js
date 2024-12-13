@@ -166,13 +166,13 @@ async function sort(sortBy = "name", order = "asc") {
   const url = buildURL(BASE_URL, {
     sortBy: sortBy,
     order: order,
-    limit: "3",
+    // limit: "3",
   });
   console.log("this is sort url", url);
   try {
     const data = await getData(url);
     if (data) {
-      renderRecipes(data.recipes);
+      renderRecipes(data.recipes.slice(0, 3));
       console.log(data);
 
       const params = new URLSearchParams(window.location.search);
@@ -189,12 +189,13 @@ async function sort(sortBy = "name", order = "asc") {
 async function meal(mealType = "All") {
   const url =
     mealType === "All"
-      ? `${BASE_URL}?limit=3`
-      : `https://dummyjson.com/recipes/meal-type/${mealType.toLowerCase()}?limit=3`;
+      ? BASE_URL
+      : `https://dummyjson.com/recipes/meal-type/${mealType.toLowerCase()}`;
   try {
     const data = await getData(url);
     if (data) {
-      renderRecipes(data.recipes);
+      renderRecipes(data.recipes.slice(0, 3));
+      console.log(data);
 
       const params = new URLSearchParams(window.location.search);
       params.set("mealType", mealType);
