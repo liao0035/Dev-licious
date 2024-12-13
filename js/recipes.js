@@ -73,7 +73,13 @@ async function searchRecipes(query) {
     limit: "3",
   });
 
+  // show the new URL on the URL bar ******
+  const params = new URLSearchParams(window.location.search);
+  params.set("q", query);
+  window.history.pushState({}, "", `?${params.toString()}`);
+
   console.log(url);
+
   try {
     const data = await getData(url);
     console.log(data);
@@ -101,6 +107,8 @@ function searchInput() {
     }
   });
 }
+
+// Save in Cache
 
 loadRecipes();
 searchInput();
