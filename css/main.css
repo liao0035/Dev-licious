@@ -739,7 +739,7 @@ h5 {
   /* banner style */
   background-image:
     linear-gradient(to bottom, #0009, #0009),
-    url('../image/banner.jpg');
+    url(../image/banner.jpg);
   background-position: center;
   background-size: cover;
 
