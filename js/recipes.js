@@ -3,6 +3,9 @@ import { getData } from "./fetch.js";
 const BASE_URL = "https://dummyjson.com/recipes";
 const cacheName = "dummy";
 
+let currentPage = 1;
+const recipesPerPage = 3;
+
 // Build URL
 function buildURL(base, params) {
   const url = new URL(base);
@@ -73,14 +76,13 @@ async function searchRecipes(query) {
   if (cachedData) {
     // If data is found in the cache, render it
     console.log("Rendering recipes from cache...");
-    renderRecipes(cachedData.recipes);
+    renderRecipes(cachedData.recipes.slice(0, 3));
   } else {
     // If no data in cache, fetch from the network
     const url = buildURL(BASE_URL + "/search", {
       q: query,
       sortBy: "rating",
       order: "desc",
-      limit: "3",
     });
 
     // Show the new URL in the URL bar
@@ -93,7 +95,8 @@ async function searchRecipes(query) {
       console.log("Fetched data from API:", data);
 
       if (data) {
-        renderRecipes(data.recipes);
+        renderRecipes(data.recipes.slice(0, 3));
+
         // Save the fetched data to cache
         saveToCache(query, data);
       }
@@ -112,6 +115,10 @@ function searchInput() {
       const query = search.value.trim();
       if (query) {
         console.log("search for:", query);
+
+        // reset the first page when starting a new search
+        currentPage = 1;
+
         searchRecipes(query);
       } else {
         console.log("search is empty");
@@ -126,7 +133,7 @@ async function saveToCache(query, result) {
     const cache = await caches.open(cacheName);
     const searchURL = buildURL(BASE_URL + "/search", {
       q: query,
-      limit: 3,
+      // limit: 3,
     });
     const response = new Response(JSON.stringify(result));
     // Save response in cache
