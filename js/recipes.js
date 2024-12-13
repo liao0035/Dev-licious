@@ -103,34 +103,12 @@ async function searchRecipes(query) {
   }
 }
 
-// search event listener
-function searchInput() {
-  const search = document.getElementById("search");
-  search.addEventListener("keydown", (ev) => {
-    if (ev.key === "Enter") {
-      ev.preventDefault();
-      const query = search.value.trim();
-      if (query) {
-        console.log("search for:", query);
-
-        // reset the first page when starting a new search
-        // currentPage = 1;
-
-        searchRecipes(query);
-      } else {
-        console.log("search is empty");
-      }
-    }
-  });
-}
-
 // Save search result in cache
 async function saveToCache(query, result) {
   try {
     const cache = await caches.open(cacheName);
     const searchURL = buildURL(BASE_URL + "/search", {
       q: query,
-      // limit: 3,
     });
     const response = new Response(JSON.stringify(result));
     // Save response in cache
@@ -203,16 +181,19 @@ async function meal(mealType = "All") {
   }
 }
 
-// event listener sorting & meal-type
+// event listener
 function filterListener() {
   const mealTypeSelect = document.getElementById("mealType");
   const sortBySelect = document.getElementById("sortBy");
+  const search = document.getElementById("search");
 
+  // meal type event listener
   mealTypeSelect.addEventListener("change", (ev) => {
     const mealType = ev.target.value;
     meal(mealType);
   });
 
+  // sort by event listener
   sortBySelect.addEventListener("change", (ev) => {
     const sortBy = ev.target.value;
     if (sortBy === "topRate") {
@@ -221,8 +202,22 @@ function filterListener() {
       sort("name", "asc");
     }
   });
+
+  // search event listener
+  search.addEventListener("keydown", (ev) => {
+    if (ev.key === "Enter") {
+      ev.preventDefault();
+      const query = search.value.trim();
+      if (query) {
+        console.log("search for:", query);
+
+        searchRecipes(query);
+      } else {
+        console.log("search is empty");
+      }
+    }
+  });
 }
 
 loadRecipes();
 filterListener();
-searchInput();
