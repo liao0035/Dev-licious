@@ -1,10 +1,7 @@
 import { getData } from "./fetch.js";
 
-document.addEventListener("DOMContentLoaded", () => {
-  searchInput();
-});
-
 const BASE_URL = "https://dummyjson.com/recipes";
+const cacheName = "dummy";
 
 // Build URL
 function buildURL(base, params) {
@@ -15,13 +12,14 @@ function buildURL(base, params) {
   return url.toString();
 }
 
-// Initial 6 recipes
+// Initial 6 recipes URL
 async function loadRecipes() {
   const url = buildURL(BASE_URL, {
     sortBy: "rating",
     order: "desc",
     limit: "6",
   });
+
   // console.log(url);
   const data = await getData(url);
   // console.log(data.recipes);
@@ -65,38 +63,44 @@ function renderRecipes(recipes) {
   ul.append(df);
 }
 
-// Search URL setting
+// Search URL setting (3 recipes)
 async function searchRecipes(query) {
   if (!query) return;
-  let url = new URL(location.href);
-  url.pathname = "/search";
-  url.searchParams.set("q", query);
-  url.searchParams.set("sortBy", "rating");
-  url.searchParams.set("order", "desc");
-  /*   const url = buildURL(BASE_URL + "/search", {
+  const url = buildURL(BASE_URL + "/search", {
     q: query,
     sortBy: "rating",
     order: "desc",
     limit: "3",
-  }); */
+  });
 
-  const data = await getData(url.toString());
-  console.log(data);
-  renderRecipes(data.recipes);
+  console.log(url);
+  try {
+    const data = await getData(url);
+    console.log(data);
+    if (data) {
+      renderRecipes(data.recipes);
+    }
+  } catch (err) {
+    console.log("searchRecipes url setting fail:", err);
+  }
 }
-
-searchInput();
 
 // search event listener
 function searchInput() {
   const search = document.getElementById("search");
   search.addEventListener("keydown", (ev) => {
-    // ev.preventDefault();
     if (ev.key === "Enter") {
+      ev.preventDefault();
       const query = search.value.trim();
-      searchRecipes(query);
+      if (query) {
+        console.log("search for:", query);
+        searchRecipes(query);
+      } else {
+        console.log("search is empty");
+      }
     }
   });
 }
 
 loadRecipes();
+searchInput();

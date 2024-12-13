@@ -1070,6 +1070,16 @@ h5 {
   display: flex;
   justify-content: space-between;
   align-items: center;
+
+  a {
+    text-decoration: none;
+    cursor: pointer;
+    color: #8e5a39;
+
+    &:where(:hover, :focus-visible) {
+      color: #FFA500;
+    }
+  }
 }
 
 .pagination .disable {

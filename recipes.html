@@ -20,13 +20,13 @@
   <!-- google icon -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 
-  <!-- style sheet -->
-  <link rel="stylesheet" href="./css/main.css" />
-  <script src="./js/main.js" type="module"></script>
-
   <!-- Ionicons  -->
   <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
   <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+
+  <!-- style sheet -->
+  <link rel="stylesheet" href="./css/main.css" />
+  <script src="./js/main.js" type="module"></script>
 
   <title>Recipes</title>
 </head>
@@ -54,17 +54,20 @@
           <li><a class="navbar__link" href="./recipes.html">Recipes</a></li>
           <li><a class="navbar__link" href="./blog.html">Blog</a></li>
 
+          <!-- input search -->
           <li>
-            <form action="./recipes.html" method="get" class="navbar__form">
+            <form action="./recipes.html" method="get" class="navbar__form" id="search-form">
               <div class="input-container">
                 <label for="search" class="srt">Search</label>
-                <input type="search" required id="search" name="q" />
-                <button type="submit" class="submitbtn" id="searchBtn">
+                <input type="search" id="search" name="keyword" required />
+                <button type="submit" class="submitbtn">
                   <i class="material-symbols-outlined">search</i>
                 </button>
+
               </div>
             </form>
           </li>
+
 
         </ul>
       </nav>
@@ -91,7 +94,7 @@
               <!-- meal type -->
               <li class="card-filter__unit">
                 <label for="mealType">Meal Type:</label>
-                <select id="type" name="mealType" onchange="this.form.submit()">
+                <select id="mealType" name="mealType" onchange="this.form.submit()">
                   <option value="All">All</option>
                   <option value="Breakfast">Breakfast</option>
                   <option value="Lunch">Lunch</option>
@@ -103,7 +106,7 @@
               <!-- sort by -->
               <li class="card-filter__unit">
                 <label for="sortBy">Sort By:</label>
-                <select id="sort" name="sortBy" onchange="this.form.submit()">
+                <select id="sortBy" name="sortBy" onchange="this.form.submit()">
                   <option value="topRate">Top Rated</option>
                   <option value="name">Name</option>
                 </select>
