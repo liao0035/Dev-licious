@@ -35,11 +35,8 @@ function renderRecipes(recipes) {
   recipes.forEach((recipe) => {
     const clone = template.content.cloneNode(true);
     clone.querySelector(".card__img").src = recipe.image;
+    clone.querySelector(".card__img").alt = recipe.name;
     clone.querySelector(".card__title").textContent = recipe.name;
-
-    /*    const cuisine = clone.querySelector(".card__cuisine");
-    cuisine.querySelector("i").textContent = "flag_2";
-    cuisine.append((document.textContent = recipe.cuisine)); */
 
     const rating = clone.querySelector(".card__rating");
     rating.querySelector("i").textContent = "star";

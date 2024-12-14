@@ -32,6 +32,7 @@ function renderRecipes(recipes) {
   recipes.forEach((recipe) => {
     const clone = template.content.cloneNode(true);
     clone.querySelector(".card__img").src = recipe.image;
+    clone.querySelector(".card__img").alt = recipe.name;
     clone.querySelector(".card__title").textContent = recipe.name;
 
     const rating = clone.querySelector(".card__rating");

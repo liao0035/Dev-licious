@@ -14,8 +14,9 @@ async function fetchRecipe() {
 
   if (params.has("search")) {
     let search = params.get("search");
+
+    // get the data from cache
     try {
-      // get the data from cache
       const cache = await caches.open(cacheName);
       const cacheRequest = new Request(
         `https://dummyjson.com/recipes/search?q=${search}`
@@ -61,7 +62,13 @@ async function fetchRecipe() {
     result = sortResults(result, sort);
   }
 
-  renderRecipes(result.slice(0, 3));
+  let page = 0;
+
+  if (params.has("page")) {
+    page = parseInt(params.get("page"));
+  }
+
+  renderRecipes(result.slice(0, 3), page);
 }
 // filter meal type
 function filterResults(result, type) {
@@ -96,6 +103,7 @@ function renderRecipes(recipes) {
     const clone = template.content.cloneNode(true);
 
     clone.querySelector(".card__img").src = recipe.image;
+    clone.querySelector(".card__img").alt = recipe.name;
     clone.querySelector(".card__title").textContent = recipe.name;
 
     const rating = clone.querySelector(".card__rating");
