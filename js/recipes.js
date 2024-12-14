@@ -54,8 +54,9 @@ async function fetchRecipe() {
 
   if (params.has("mealType")) {
     let type = params.get("mealType");
-    console.log(type);
-    console.log("this is from mealtype", result);
+    console.log("type", type);
+
+    console.log("result from meal type", result);
     result = filterResults(result, type);
   }
 
@@ -112,6 +113,13 @@ function changePage(page) {
 
 // filter meal type
 function filterResults(result, type) {
+  const select = document.querySelector("#mealType");
+  const options = select.querySelectorAll("option");
+  options.forEach((option) => {
+    if (option.value === type) {
+      option.setAttribute("selected", "selected");
+    }
+  });
   if (type === "All") {
     return result;
   }
@@ -119,6 +127,13 @@ function filterResults(result, type) {
 }
 // filer sortBy
 function sortResults(result, sort) {
+  const select = document.querySelector("#sortBy");
+  const options = select.querySelectorAll("option");
+  options.forEach((option) => {
+    if (option.value === sort) {
+      option.setAttribute("selected", "selected");
+    }
+  });
   switch (sort) {
     case "topRate":
       return result.toSorted((a, b) => b.rating - a.rating);
