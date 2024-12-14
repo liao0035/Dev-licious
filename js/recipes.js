@@ -1,7 +1,6 @@
 import { getData } from "./fetch.js";
 
 const cacheName = "dummy";
-let currentPage = 0;
 
 (() => {
   fetchRecipe();
