@@ -6,6 +6,7 @@ async function fetchRecipe(id) {
     throw new Error("recipe ID not found");
   }
   const url = `https://dummyjson.com/recipes/${id}`;
+  console.log(url);
   return await getData(url);
 }
 

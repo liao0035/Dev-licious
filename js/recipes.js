@@ -25,11 +25,13 @@ async function fetchRecipe() {
       if (cacheResponse) {
         const cacheData = await cacheResponse.json();
         result = cacheData.recipes;
+        // console.log("result from cache", result);
       } else {
         // get the data from API endpoint
         const url = `https://dummyjson.com/recipes/search?q=${search}`;
         let response = await getData(url);
         result = response.recipes;
+        // console.log("result from api", result);
 
         // save the result into cache
         await cache.put(cacheRequest, new Response(JSON.stringify(response)));
