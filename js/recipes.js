@@ -1,6 +1,7 @@
 import { getData } from "./fetch.js";
 
 const cacheName = "dummy";
+let currentPage = 0;
 
 (() => {
   fetchRecipe();
@@ -11,6 +12,8 @@ async function fetchRecipe() {
   let url = new URL(location.href);
   let params = url.searchParams;
   let result = [];
+
+  let itemsPerPage = 3;
 
   if (params.has("search")) {
     let search = params.get("search");
@@ -65,13 +68,49 @@ async function fetchRecipe() {
   }
 
   let page = 0;
-
   if (params.has("page")) {
     page = parseInt(params.get("page"));
   }
 
-  renderRecipes(result.slice(0, 3), page);
+  // get the start and end
+  let start = page * itemsPerPage;
+  let end = start + itemsPerPage;
+  console.log(start);
+  renderRecipes(result.slice(start, end), page);
+
+  console.log(result);
+  // setup pagination
+  setPagination(result.length, itemsPerPage, page);
 }
+// pagination
+function setPagination(totalItems, itemsPerPage, currentPage) {
+  let totalPages = Math.ceil(totalItems / itemsPerPage);
+  const prev = document.getElementById("prev-page");
+  const next = document.getElementById("next-page");
+
+  if (currentPage > 0) {
+    prev.style.pointerEvents = "auto";
+    prev.onclick = () => changePage(currentPage - 1);
+  } else {
+    prev.style.pointerEvents = "none";
+  }
+
+  if (currentPage < totalPages - 1) {
+    next.style.pointerEvents = "auto";
+    next.onclick = () => changePage(currentPage + 1);
+  } else {
+    next.style.pointerEvents = "none";
+  }
+}
+function changePage(page) {
+  let url = new URL(location.href);
+  let params = url.searchParams;
+  params.set("page", page);
+  window.location.search = params.toString();
+
+  fetchRecipe();
+}
+
 // filter meal type
 function filterResults(result, type) {
   if (type === "All") {
