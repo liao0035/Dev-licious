@@ -1,29 +1,85 @@
 import { getData } from "./fetch.js";
 
-const BASE_URL = "https://dummyjson.com/recipes";
 const cacheName = "dummy";
 
-// Build URL
-function buildURL(base, params) {
-  const url = new URL(base);
-  Object.keys(params).forEach((key) => {
-    url.searchParams.append(key, params[key]);
-  });
-  return url.toString();
+(() => {
+  fetchRecipe();
+  filterListener();
+})();
+
+async function fetchRecipe() {
+  let url = new URL(location.href);
+  let params = url.searchParams;
+  let result = [];
+
+  if (params.has("search")) {
+    let search = params.get("search");
+    try {
+      // get the data from cache
+      const cache = await caches.open(cacheName);
+      const cacheRequest = new Request(
+        `https://dummyjson.com/recipes/search?q=${search}`
+      );
+      const cacheResponse = await cache.match(cacheRequest);
+      if (cacheResponse) {
+        const cacheData = await cacheResponse.json();
+        result = cacheData.recipes;
+      } else {
+        // get the data from API endpoint
+        const url = `https://dummyjson.com/recipes/search?q=${search}`;
+        let response = await getData(url);
+        result = response.recipes;
+
+        // save the result into cache
+        await cache.put(cacheRequest, new Response(JSON.stringify(response)));
+      }
+      // set the value to those input
+      document.querySelector("#search").value = search;
+      document.querySelector("#filter-input").value = search;
+    } catch (err) {
+      console.error(err);
+    }
+  } else {
+    const url = `https://dummyjson.com/recipes/`;
+    let response = await getData(url);
+    // to convert object into array
+    result = response.recipes;
+    console.log(result);
+  }
+
+  if (params.has("mealType")) {
+    let type = params.get("mealType");
+    console.log(type);
+    console.log("this is from mealtype", result);
+    result = filterResults(result, type);
+  }
+
+  if (params.has("sortBy")) {
+    let sort = params.get("sortBy");
+    console.log(sort);
+    console.log("this is the result from sortby", result);
+    result = sortResults(result, sort);
+  }
+
+  renderRecipes(result.slice(0, 3));
 }
-
-// Initial 6 recipes URL
-async function loadRecipes() {
-  const url = buildURL(BASE_URL, {
-    sortBy: "rating",
-    order: "desc",
-    limit: 6,
-  });
-
-  // console.log(url);
-  const data = await getData(url);
-  // console.log(data.recipes);
-  renderRecipes(data.recipes);
+// filter meal type
+function filterResults(result, type) {
+  if (type === "All") {
+    return result;
+  }
+  return result.filter((recipe) => recipe.mealType.includes(type));
+}
+// filer sortBy
+function sortResults(result, sort) {
+  switch (sort) {
+    case "topRate":
+      return result.toSorted((a, b) => b.rating - a.rating);
+    case "name":
+      return result.toSorted((a, b) => a.name.localeCompare(b.name));
+    default:
+      return result;
+  }
 }
 
 // Create HTML
@@ -63,161 +119,18 @@ function renderRecipes(recipes) {
   ul.append(df);
 }
 
-// Search recipes with cache
-async function searchRecipes(query) {
-  if (!query) return;
-
-  // Try to get data from cache first
-  const cachedData = await retrieveCache(query);
-
-  if (cachedData) {
-    // If data is found in the cache, render it
-    console.log("Rendering recipes from cache...");
-    renderRecipes(cachedData.recipes.slice(0, 3));
-  } else {
-    // If no data in cache, fetch from the network
-    const url = buildURL(BASE_URL + "/search", {
-      q: query,
-      sortBy: "rating",
-      order: "desc",
-    });
-
-    // Show the new URL in the URL bar
-    const params = new URLSearchParams(window.location.search);
-    params.set("q", query);
-    window.history.pushState({}, "", `?${params.toString()}`);
-
-    try {
-      const data = await getData(url);
-      console.log("Fetched data from API:", data);
-
-      if (data) {
-        renderRecipes(data.recipes.slice(0, 3));
-
-        // Save the fetched data to cache
-        saveToCache(query, data);
-      }
-    } catch (err) {
-      console.log("searchRecipes API call failed:", err);
-    }
-  }
-}
-
-// Save search result in cache
-async function saveToCache(query, result) {
-  try {
-    const cache = await caches.open(cacheName);
-    const searchURL = buildURL(BASE_URL + "/search", {
-      q: query,
-    });
-    const response = new Response(JSON.stringify(result));
-    // Save response in cache
-    await cache.put(searchURL, response);
-  } catch (err) {
-    console.error("Error saving to cache:", err);
-  }
-}
-
-// Retrieve search results from cache
-async function retrieveCache(query) {
-  try {
-    const cache = await caches.open(cacheName);
-    const searchURL = buildURL(BASE_URL + "/search", {
-      q: query,
-    });
-    const cachedResponse = await cache.match(searchURL);
-    if (cachedResponse) {
-      const data = await cachedResponse.json();
-      return data;
-    }
-  } catch (err) {
-    console.error("Error retrieving from cache:", err);
-  }
-  return null;
-}
-
-// sort by name or rating
-async function sort(sortBy = "name", order = "asc") {
-  const url = buildURL(BASE_URL, {
-    sortBy: sortBy,
-    order: order,
-    // limit: "3",
-  });
-  console.log("this is sort url", url);
-  try {
-    const data = await getData(url);
-    if (data) {
-      renderRecipes(data.recipes.slice(0, 3));
-      console.log(data);
-
-      const params = new URLSearchParams(window.location.search);
-      params.set("sortBy", sortBy);
-      params.set("order", order);
-      window.history.pushState({}, "", `?${params.toString()}`);
-    }
-  } catch (err) {
-    console.error("sort error:", err);
-  }
-}
-
-// meal-type
-async function meal(mealType = "All") {
-  const url =
-    mealType === "All"
-      ? BASE_URL
-      : `https://dummyjson.com/recipes/meal-type/${mealType.toLowerCase()}`;
-  try {
-    const data = await getData(url);
-    if (data) {
-      renderRecipes(data.recipes.slice(0, 3));
-      console.log(data);
-
-      const params = new URLSearchParams(window.location.search);
-      params.set("mealType", mealType);
-      window.history.pushState({}, "", `?${params.toString()}`);
-    }
-  } catch (err) {
-    console.error("meal type:", err);
-  }
-}
-
 // event listener
 function filterListener() {
   const mealTypeSelect = document.getElementById("mealType");
   const sortBySelect = document.getElementById("sortBy");
-  const search = document.getElementById("search");
 
   // meal type event listener
-  mealTypeSelect.addEventListener("change", (ev) => {
-    const mealType = ev.target.value;
-    meal(mealType);
+  mealTypeSelect.addEventListener("change", () => {
+    document.getElementById("filter-form").submit();
   });
 
   // sort by event listener
-  sortBySelect.addEventListener("change", (ev) => {
-    const sortBy = ev.target.value;
-    if (sortBy === "topRate") {
-      sort("rating", "desc");
-    } else if (sortBy === "name") {
-      sort("name", "asc");
-    }
-  });
-
-  // search event listener
-  search.addEventListener("keydown", (ev) => {
-    if (ev.key === "Enter") {
-      ev.preventDefault();
-      const query = search.value.trim();
-      if (query) {
-        console.log("search for:", query);
-
-        searchRecipes(query);
-      } else {
-        console.log("search is empty");
-      }
-    }
+  sortBySelect.addEventListener("change", () => {
+    document.getElementById("filter-form").submit();
   });
 }
-
-loadRecipes();
-filterListener();
