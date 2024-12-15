@@ -28,6 +28,12 @@
   <script src="./js/main.js" type="module"></script>
 
 
+  <!-- prof comment
+    title should be descriptive of the page.
+
+    On the home page it should be:
+    <title>Dev-licious</title>
+  -->
   <title>Dummy Receipt</title>
 </head>
 
@@ -83,6 +89,12 @@
     <!-- banner -->
     <!-- this should be a header -->
     <header>
+      <!-- prof comment
+        When I said that this should be a <header>,
+        I meant replace the section with a header.
+        Meaning there should not be a <section class="banner banner--hero" tabindex="0">
+        but instead <header class="banner banner--hero" tabindex="0">
+      -->
       <section class="banner banner--hero" tabindex="0">
         <div class="container">
           <div class="banner__content">
@@ -102,7 +114,12 @@
 
         <div class="card-group__page">
           <h2 class="card-group__title">Top Rated Recipes</h2>
-          <a href="./recipes.html" class="btn" aria-label="click here to Receipts page">view all</a>
+          <a href="./recipes.html" class="btn" aria-label="click here to Receipts page">
+            <!-- prof comment
+              Use proper sentence case: "View all"
+            -->
+            view all
+          </a>
         </div>
 
         <ul class="card-group__list" role="list">
@@ -117,6 +134,9 @@
         <div class="sign-up__wrap">
           <form class="sign-up__form" action="https://formspree.io/f/mbljqebz" method="POST">
             <div class="form-unit">
+              <!-- prof comment
+                should be h2
+              -->
               <h3 class="sign-up__title">
                 Sign up for the Dev-licious newsletter!
               </h3>
@@ -209,6 +229,11 @@
           <p class="card__tag">
             <i class="material-symbols-outlined"></i>
           </p>
+          <!-- prof comment
+            you cannot have an <a> as a descendent of another <a>
+            Since this <a> gets the href dynamically from your JS,
+            you should change the <a class="card"> to a div instead
+          -->
           <a href="#" class="card__btn" aria-label="click here to single recipe page"><span class="srt">Learn More</span></a>
         </div>
       </a>
