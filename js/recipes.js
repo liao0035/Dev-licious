@@ -16,6 +16,7 @@ async function fetchRecipe() {
 
   if (params.has("search")) {
     let search = params.get("search");
+    console.log(search);
 
     // get the data from cache
     try {
@@ -55,7 +56,6 @@ async function fetchRecipe() {
   if (params.has("mealType")) {
     let type = params.get("mealType");
     console.log("type", type);
-
     console.log("result from meal type", result);
     result = filterResults(result, type);
   }
@@ -75,6 +75,7 @@ async function fetchRecipe() {
   // get the start and end
   let start = page * itemsPerPage;
   let end = start + itemsPerPage;
+
   console.log(start);
   renderRecipes(result.slice(start, end), page);
 
@@ -85,6 +86,7 @@ async function fetchRecipe() {
 // pagination
 function setPagination(totalItems, itemsPerPage, currentPage) {
   let totalPages = Math.ceil(totalItems / itemsPerPage);
+
   const prev = document.getElementById("prev-page");
   const next = document.getElementById("next-page");
 
@@ -108,13 +110,14 @@ function changePage(page) {
   params.set("page", page);
   window.location.search = params.toString();
 
-  fetchRecipe();
+  // fetchRecipe();
 }
 
 // filter meal type
 function filterResults(result, type) {
   const select = document.querySelector("#mealType");
   const options = select.querySelectorAll("option");
+
   options.forEach((option) => {
     if (option.value === type) {
       option.setAttribute("selected", "selected");
@@ -129,11 +132,13 @@ function filterResults(result, type) {
 function sortResults(result, sort) {
   const select = document.querySelector("#sortBy");
   const options = select.querySelectorAll("option");
+
   options.forEach((option) => {
     if (option.value === sort) {
       option.setAttribute("selected", "selected");
     }
   });
+
   switch (sort) {
     case "topRate":
       return result.toSorted((a, b) => b.rating - a.rating);

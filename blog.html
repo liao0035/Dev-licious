@@ -45,7 +45,7 @@
   <header class="navbar">
     <div class="container">
       <div class="navbar__headline">
-        <a class="navbar__logo" href="/">
+        <a class="navbar__logo" href="./index.html">
           Dev-licious
         </a>
       </div>
@@ -86,10 +86,10 @@
     <article>
 
       <!-- banner -->
-       <!-- prof comment
+      <!-- prof comment
          this section should be a <header>
        -->
-      <section section class="banner banner--hero banner--blog" tabindex="0">
+      <header section class="banner banner--hero banner--blog" tabindex="0">
         <div class="container">
           <div class="banner__content">
             <h1 class="banner__title">Cook More Often</h1>
@@ -103,7 +103,7 @@
             <!-- <a href="#" class="btn btn--secondary btn--large">Learn More</a> -->
           </div>
         </div>
-      </section>
+      </header>
 
       <!-- tag -->
       <section class="tags">
@@ -291,26 +291,27 @@
       </section>
 
       <!-- card group -->
-       <!-- prof comment
+      <!-- prof comment
          change this section to an <aside> or move outside after the article
        -->
-      <section class="card-group" id="resources" tabindex="0">
-        <div class="container">
-
-          <div class="card-group__page">
-            <h2 class="card-group__title">Top Rated Recipes</h2>
-            <a href="./recipes.html" class="btn">view all</a>
-          </div>
-
-
-          <ul class="card-group__list" role="list">
-            <!-- insert JS template -->
-          </ul>
-
-        </div>
-      </section>
 
     </article>
+
+    <section class="card-group" id="resources" tabindex="0">
+      <div class="container">
+
+        <div class="card-group__page">
+          <h2 class="card-group__title">Top Rated Recipes</h2>
+          <a href="./recipes.html" class="btn">view all</a>
+        </div>
+
+
+        <ul class="card-group__list" role="list">
+          <!-- insert JS template -->
+        </ul>
+
+      </div>
+    </section>
   </main>
 
   <footer class="footer">
@@ -351,9 +352,6 @@
     </div>
   </footer>
 
-
-
-
   <!-- to top -->
   <a href="#page" class="to-top">To Top</a>
   <div class="click-to-close" data-toggle="nav"></div>
@@ -361,7 +359,7 @@
   <!-- JS template for card group -->
   <template id="card-group__template">
     <li class="col">
-      <a class="card" href="#" aria-label="click here to single recipe page">
+      <div class="card" href="#" aria-label="click here to single recipe page">
         <img class="card__img" alt="#" />
         <div class="card__content">
           <h3 class="card__title"></h3>
@@ -377,7 +375,7 @@
           </p>
           <a href="#" class="card__btn" aria-label="click here to single recipe page"><span class="srt">Learn More</span></a>
         </div>
-      </a>
+      </div>
     </li>
   </template>
 

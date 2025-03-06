@@ -1,5 +1,9 @@
 import { getData } from "./fetch.js";
 
+(() => {
+  loadRecipes();
+})();
+
 // define the URL
 async function fetchRecipes() {
   const params = new URLSearchParams({
@@ -53,5 +57,3 @@ function renderRecipes(recipes) {
   });
   ul.append(df);
 }
-
-loadRecipes();

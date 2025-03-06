@@ -996,7 +996,7 @@ h5 {
 
 
 .card__content {
-  /* for transition setting-background colo */
+  /* for transition setting-background */
   position: absolute;
   inset: 0;
   display: flex;
@@ -1010,7 +1010,8 @@ h5 {
 
   .card__title {
     margin: 0;
-    flex: 1 0 3rem;
+    /* this will make card-title move away from the card__content */
+    /* flex: 1 0 3rem; */
     color: var(--color-background);
     font-size: clamp(1.424rem, 3.377cqi, 1.953rem);
 
@@ -1292,7 +1293,7 @@ select {
   border-radius: var(--radius);
   overflow: hidden;
   box-shadow: var(--shadow);
-  aspect-ratio: 3/ 3;
+  /* aspect-ratio: 3/ 3; */
 
   img {
     object-fit: cover;
@@ -1353,7 +1354,7 @@ select {
 
 
   .single-recipe__img {
-    aspect-ratio: 4/5;
+    /* aspect-ratio: 4/5; */
 
     img {
       aspect-ratio: 4/5;

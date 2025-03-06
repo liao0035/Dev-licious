@@ -1,5 +1,10 @@
 import { getData } from "./fetch.js";
 
+(() => {
+  loadingRecipe();
+  loadRecipes();
+})();
+
 // define the URL
 async function fetchRecipe(id) {
   if (!id) {
@@ -94,7 +99,7 @@ function renderRecipe(data) {
 // define the URL
 async function fetchRecipes() {
   const params = new URLSearchParams({
-    limit: 3,
+    // limit: 3,
     sortBy: "rating",
     order: "desc",
   });
@@ -108,7 +113,7 @@ async function loadRecipes() {
     const data = await fetchRecipes();
     const recipes = data.recipes;
     console.log("this is recipes from loadRecipes", recipes);
-    renderRecipes(recipes);
+    renderRecipes(recipes.slice(0, 3));
   } catch (err) {
     console.error("error loading recipes:", err);
   }
@@ -145,6 +150,3 @@ function renderRecipes(recipes) {
   });
   ul.append(df);
 }
-
-loadingRecipe();
-loadRecipes();
